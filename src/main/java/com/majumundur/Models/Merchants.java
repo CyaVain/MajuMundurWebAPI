@@ -10,6 +10,7 @@ import lombok.*;
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
 @Table(name = "m_merchants")
 public class Merchants {
     @Id

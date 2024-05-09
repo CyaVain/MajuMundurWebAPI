@@ -1,10 +1,7 @@
 package com.majumundur.Models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.sql.Date;
 
@@ -13,6 +10,7 @@ import java.sql.Date;
 @AllArgsConstructor // Constructor Dengan Parameter / Args
 @NoArgsConstructor // Constructor tanpa parameter / args
 @Entity // Annotasi Jakarta untuk menandakan ini Entity
+@Builder // Annotasi Lombok untuk mempermudah inisiasi & set object
 @Table(name = "m_customers") // Annotasi untuk memberikan nama table pada database
 public class Customers {
     @Id // Annotasi Jakarta untuk Menandakan Attribute Yang Merupakan Primary Key
