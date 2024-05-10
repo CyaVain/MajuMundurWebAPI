@@ -3,25 +3,22 @@ package com.majumundur.Models;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.List;
-
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 @Builder
 @Entity
-@Table(name = "m_merchants")
-public class Merchants {
+@Table(name = "m_products")
+public class Products {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
+    private String code;
     private String name;
-    @Column(name = "phone_number")
-    private String phoneNumber;
-    private String email;
-    private String password;
+    private String description;
+    private Double price;
 
-    @OneToMany
-    private List<Products> productsList;
+    @ManyToOne
+    private Merchants merchant;
 }

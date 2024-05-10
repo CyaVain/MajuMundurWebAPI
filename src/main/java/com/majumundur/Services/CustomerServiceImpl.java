@@ -1,7 +1,7 @@
 package com.majumundur.Services;
 
 import com.majumundur.Models.Customers;
-import com.majumundur.Security.DTO.Request.CustomerCreateRequest;
+import com.majumundur.Security.Models.DTO.Request.CustomerCreateRequest;
 import com.majumundur.Repositories.CustomerRepository;
 import com.majumundur.Security.Models.UserCredentials;
 import org.springframework.stereotype.Service;
@@ -20,7 +20,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Transactional
     @Override
-    public Customers Create(CustomerCreateRequest request, UserCredentials credentials) {
+    public Customers Save(CustomerCreateRequest request, UserCredentials credentials) {
         Customers customer = Customers.builder()
                 .name(request.getName())
                 .phoneNumber(request.getPhoneNumber())

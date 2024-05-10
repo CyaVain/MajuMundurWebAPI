@@ -23,7 +23,7 @@ public class RewardsController {
 
     @Operation(summary = "View All Rewards" , description = "Get All Reward's Stored Data")
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ControllerResponse> GetAllRewards(){
+    public ResponseEntity<ControllerResponse> getAllRewards(){
         ControllerResponse<?> response = service.GetAll();
         return ResponseEntity.ok(response);
     }
@@ -33,7 +33,7 @@ public class RewardsController {
             consumes = MediaType.APPLICATION_JSON_VALUE
     )
     @PreAuthorize("hasRole('SUPER_ADMIN')")
-    public ResponseEntity<?> CreateNewReward(@RequestBody RewardsCreateRequest request){
+    public ResponseEntity<?> createNewReward(@RequestBody RewardsCreateRequest request){
             ControllerResponse<?> response = service.Create(request);
             return  ResponseEntity.ok(response);
     }

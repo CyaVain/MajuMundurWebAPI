@@ -1,8 +1,9 @@
 package com.majumundur.Controllers;
 
 import com.majumundur.Models.DTO.Responses.ControllerResponse;
-import com.majumundur.Security.DTO.Request.CustomerCreateRequest;
-import com.majumundur.Security.DTO.Request.LoginRequest;
+import com.majumundur.Security.Models.DTO.Request.CustomerCreateRequest;
+import com.majumundur.Security.Models.DTO.Request.LoginRequest;
+import com.majumundur.Security.Models.DTO.Request.MerchantCreateRequest;
 import com.majumundur.Security.Services.AuthenticationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -28,18 +29,28 @@ public class AuthenticationController {
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<ControllerResponse> Login(@RequestBody LoginRequest request){
+    public ResponseEntity<ControllerResponse> login(@RequestBody LoginRequest request){
         ControllerResponse<?> response = service.login(request);
         return ResponseEntity.ok(response);
     }
 
-    @Operation(summary = "Register As Customer" , description = "Register As A Customer and Gain Role CUSTOMER")
-    @PostMapping(path = "/register-customer",
+    @Operation(summary = "Register As Customer" , description = "Register As A Customer and Gain Role AS CUSTOMER")
+    @PostMapping(path = "/register-as-customer",
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<ControllerResponse> RegisterAsCustomer(@RequestBody CustomerCreateRequest request){
+    public ResponseEntity<ControllerResponse> registerAsCustomer(@RequestBody CustomerCreateRequest request){
         ControllerResponse<?> response = service.registerAsCustomer(request);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "Register As Merchant" , description = "Register As A Merchant and Gain Role AS MERCHANT")
+    @PostMapping(path = "/register-as-merchant",
+            produces = MediaType.APPLICATION_JSON_VALUE,
+            consumes = MediaType.APPLICATION_JSON_VALUE
+    )
+    public ResponseEntity<ControllerResponse> registerAsMerchant(@RequestBody MerchantCreateRequest request){
+        ControllerResponse<?> response = service.registerAsMerchant(request);
         return ResponseEntity.ok(response);
     }
 }

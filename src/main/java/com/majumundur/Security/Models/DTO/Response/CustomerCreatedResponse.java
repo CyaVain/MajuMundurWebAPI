@@ -1,4 +1,4 @@
-package com.majumundur.Security.DTO.Response;
+package com.majumundur.Security.Models.DTO.Response;
 
 import com.majumundur.Utils.RoleEnum;
 import lombok.*;

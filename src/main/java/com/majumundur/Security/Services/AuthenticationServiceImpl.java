@@ -1,15 +1,19 @@
 package com.majumundur.Security.Services;
 
 import com.majumundur.Models.Customers;
-import com.majumundur.Security.DTO.Request.CustomerCreateRequest;
+import com.majumundur.Models.Merchants;
+import com.majumundur.Security.Models.DTO.Request.CustomerCreateRequest;
 import com.majumundur.Models.DTO.Responses.ControllerResponse;
 import com.majumundur.Security.Config.JwtUtils;
-import com.majumundur.Security.DTO.Request.LoginRequest;
-import com.majumundur.Security.DTO.Response.CustomerCreatedResponse;
+import com.majumundur.Security.Models.DTO.Request.LoginRequest;
+import com.majumundur.Security.Models.DTO.Request.MerchantCreateRequest;
+import com.majumundur.Security.Models.DTO.Response.CustomerCreatedResponse;
+import com.majumundur.Security.Models.DTO.Response.MerchantCreatedResponse;
 import com.majumundur.Security.Models.Roles;
 import com.majumundur.Security.Models.UserCredentials;
 import com.majumundur.Security.Repositories.UserCredentialsRepository;
 import com.majumundur.Services.CustomerService;
+import com.majumundur.Services.MerchantService;
 import com.majumundur.Services.ValidationService;
 import com.majumundur.Utils.RoleEnum;
 import jakarta.annotation.PostConstruct;
@@ -34,8 +38,9 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private ValidationService validation;
     private UserCredentialsRepository repository;
     private CustomerService customerService;
+    private MerchantService merchantService;
 
-    public AuthenticationServiceImpl(PasswordEncoder encoder, RolesService rolesService, JwtUtils jwtUtils, AuthenticationManager authenticationManager, ValidationService validation, UserCredentialsRepository repository, CustomerService customerService) {
+    public AuthenticationServiceImpl(PasswordEncoder encoder, RolesService rolesService, JwtUtils jwtUtils, AuthenticationManager authenticationManager, ValidationService validation, UserCredentialsRepository repository, CustomerService customerService, MerchantService merchantService) {
         this.encoder = encoder;
         this.rolesService = rolesService;
         this.jwtUtils = jwtUtils;
@@ -43,6 +48,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         this.validation = validation;
         this.repository = repository;
         this.customerService = customerService;
+        this.merchantService = merchantService;
     }
 
     // Annotasi Untuk Menjalanan Method Setelah Build
@@ -65,6 +71,61 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .build();
 
         repository.saveAndFlush(credential);
+    }
+
+    @Override
+    public ControllerResponse<?> registerAsMerchant(MerchantCreateRequest request) {
+        List<String> violations = validation.validate(request);
+        if(violations != null) {
+            ControllerResponse<List> response = new ControllerResponse<>();
+            response.setStatusCode(HttpStatus.BAD_REQUEST.value());
+            response.setMessage(HttpStatus.BAD_REQUEST.getReasonPhrase());
+            response.setData(violations);
+            return response;
+        }
+        try {
+            if (repository.findByEmail(request.getEmail()).isPresent()) {
+                ControllerResponse<String> response = new ControllerResponse<>();
+                response.setStatusCode(HttpStatus.CONFLICT.value());
+                response.setMessage(HttpStatus.CONFLICT.getReasonPhrase());
+                response.setData("Email is Already Used");
+                return response;
+            }
+            Roles merchantRole = rolesService.getOrSave(RoleEnum.ROLE_MERCHANT);
+            String hashPassword = encoder.encode(request.getPassword());
+
+            UserCredentials credentials = UserCredentials.builder()
+                    .email(request.getEmail())
+                    .password(hashPassword)
+                    .roles(List.of(merchantRole))
+                    .build();
+            repository.saveAndFlush(credentials);
+
+            Merchants merchant = merchantService.Save(request, credentials);
+            MerchantCreatedResponse dto = MerchantCreatedResponse.builder()
+                    .merchantId(merchant.getId())
+                    .merchantName(merchant.getName())
+                    .merchantPhoneNumber(merchant.getPhoneNumber())
+                    .merchantEmail(merchant.getEmail())
+                    .role(RoleEnum.ROLE_MERCHANT)
+                    .build();
+
+            ControllerResponse<MerchantCreatedResponse> response = ControllerResponse.<MerchantCreatedResponse>builder()
+                    .statusCode(HttpStatus.CREATED.value())
+                    .message(HttpStatus.CREATED.getReasonPhrase())
+                    .data(dto)
+                    .build();
+
+            return response;
+        }
+        catch (Exception e){
+            ControllerResponse<String> response = new ControllerResponse<>();
+            response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+            response.setMessage(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
+            response.setData(e.getMessage());
+
+            return  response;
+        }
     }
 
     @Override
@@ -96,7 +157,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                     .build();
             repository.saveAndFlush(credentials);
 
-            Customers customer = customerService.Create(request, credentials);
+            Customers customer = customerService.Save(request, credentials);
             CustomerCreatedResponse dto = CustomerCreatedResponse.builder()
                     .customerId(customer.getId())
                     .customerName(customer.getName())
