@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -30,6 +31,7 @@ public class RewardsController {
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE
     )
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
     public ResponseEntity<ControllerResponse> CreateNewReward(@RequestBody RewardsCreateRequest request){
         ControllerResponse<?> response = service.Create(request);
         return  ResponseEntity.status(HttpStatus.CREATED).body(response);

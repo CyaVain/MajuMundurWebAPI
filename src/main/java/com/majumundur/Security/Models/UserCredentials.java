@@ -26,7 +26,7 @@ public class UserCredentials implements UserDetails {
 
     private String password;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER)
     private List<Roles> roles;
 
     @Override
