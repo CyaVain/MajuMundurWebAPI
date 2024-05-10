@@ -1,10 +1,11 @@
 package com.majumundur.Controllers;
 
-import com.majumundur.Models.DTO.ControllerResponse;
-import com.majumundur.Models.DTO.RewardsCreateRequest;
+import com.majumundur.Models.DTO.Responses.ControllerResponse;
+import com.majumundur.Models.DTO.Requests.RewardsCreateRequest;
 import com.majumundur.Services.RewardService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,17 +20,18 @@ public class RewardsController {
     }
 
     @Operation(summary = "View All Rewards" , description = "Get All Reward's Stored Data")
-    @GetMapping
+    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ControllerResponse> GetAllRewards(){
         ControllerResponse<?> response = service.GetAll();
         return ResponseEntity.ok(response);
     }
 
-
+    @Operation(summary = "Create New Reward " , description = "Create Reward, SUPER_ADMIN ONLY !!")
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE
     )
     public ResponseEntity<ControllerResponse> CreateNewReward(@RequestBody RewardsCreateRequest request){
-        return  null;
+        ControllerResponse<?> response = service.Create(request);
+        return  ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 }

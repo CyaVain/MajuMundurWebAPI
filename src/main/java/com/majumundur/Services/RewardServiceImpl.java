@@ -1,16 +1,13 @@
 package com.majumundur.Services;
 
-import com.majumundur.Models.DTO.ControllerResponse;
-import com.majumundur.Models.DTO.RewardsCreateRequest;
-import com.majumundur.Models.DTO.RewardsResponse;
+import com.majumundur.Models.DTO.Responses.ControllerResponse;
+import com.majumundur.Models.DTO.Requests.RewardsCreateRequest;
+import com.majumundur.Models.DTO.Responses.RewardsResponse;
 import com.majumundur.Models.Rewards;
 import com.majumundur.Repositories.RewardRepository;
-import lombok.Builder;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,11 +54,17 @@ public class RewardServiceImpl implements  RewardService{
             response.setData(violations);
             return response;
         }
+        if(repository.findByCode(request.getRewardsCode()) != null){
+            ControllerResponse<List<String>> response = new ControllerResponse<>();
+            response.setStatusCode(HttpStatus.OK.value());
+            response.setMessage("Reward Already Exists");
+            return response;
+        }
         //Contoh pemanfaatan Builder milik Lombok
         Rewards reward = Rewards.builder()
                 .code(request.getRewardsCode())
                 .name(request.getRewardsName())
-                .point(request.getRewardsPoints())
+                .point(request.getRequiredPoints())
                 .build();
 
         repository.save(reward);

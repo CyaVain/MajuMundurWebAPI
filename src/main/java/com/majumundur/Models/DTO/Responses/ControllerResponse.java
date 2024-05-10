@@ -1,4 +1,4 @@
-package com.majumundur.Models.DTO;
+package com.majumundur.Models.DTO.Responses;
 
 import lombok.*;
 import org.springframework.http.HttpStatus;

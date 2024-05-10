@@ -17,12 +17,12 @@ public class Customers {
     @GeneratedValue(strategy = GenerationType.UUID) // Annotasi untuk set bahwa id di Generate Dengan UUID
     private String id;
     private String name;
-//    private String email;
-//    private String password;
 
     @Column(name = "phone_number")// Menuliskan nama kolom untuk di database
     private String phoneNumber;
 
     @Column(name = "birth_date")
     private Date birthDate;
+    private String email;
+//    private String password;
 }

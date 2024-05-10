@@ -1,9 +1,8 @@
 package com.majumundur.Services;
 
-import com.majumundur.Models.DTO.ControllerResponse;
-import com.majumundur.Models.DTO.RewardsCreateRequest;
-import com.majumundur.Models.DTO.RewardsResponse;
-import org.springframework.transaction.annotation.Transactional;
+import com.majumundur.Models.DTO.Responses.ControllerResponse;
+import com.majumundur.Models.DTO.Requests.RewardsCreateRequest;
+import com.majumundur.Models.DTO.Responses.RewardsResponse;
 
 import java.util.List;
 
