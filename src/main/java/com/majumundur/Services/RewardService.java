@@ -8,8 +8,8 @@ import java.util.List;
 
 public interface RewardService {
 
-    public ControllerResponse<List<RewardsResponse>> GetAll();
+    public ControllerResponse<List<RewardsResponse>> getAll();
 
     //Penggunaan WildCard (?) untuk menghandle agar ControllerResponse dapat menerima Object Lain yang lebih fleksibel
-    public ControllerResponse<?>Create(RewardsCreateRequest request);
+    public ControllerResponse<?> create(RewardsCreateRequest request);
 }

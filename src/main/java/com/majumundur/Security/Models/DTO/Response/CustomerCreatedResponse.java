@@ -16,5 +16,6 @@ public class CustomerCreatedResponse {
     private String customerPhoneNumber;
     private String customerBirthDate;
     private String customerEmail;
+    private Integer customerPoints;
     private RoleEnum role;
 }

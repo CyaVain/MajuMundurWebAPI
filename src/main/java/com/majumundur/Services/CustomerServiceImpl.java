@@ -20,13 +20,14 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Transactional
     @Override
-    public Customers Save(CustomerCreateRequest request, UserCredentials credentials) {
+    public Customers save(CustomerCreateRequest request, UserCredentials credentials) {
         Customers customer = Customers.builder()
                 .name(request.getName())
                 .phoneNumber(request.getPhoneNumber())
                 .birthDate(Date.valueOf(request.getBirthDate()))
                 .email(credentials.getEmail())
                 .password(credentials.getPassword())
+                .rewardPoints(0)
                 .build();
         repository.save(customer);
 

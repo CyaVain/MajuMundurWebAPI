@@ -5,12 +5,10 @@ import com.majumundur.Models.DTO.Requests.RewardsCreateRequest;
 import com.majumundur.Services.RewardService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.security.access.annotation.Secured;
 
 @RestController
 @Tag(name = "Rewards Controller", description = "Controller To Upload New Rewards, View All Rewards, Search Rewards By It's Code / Name")
@@ -24,7 +22,7 @@ public class RewardsController {
     @Operation(summary = "View All Rewards" , description = "Get All Reward's Stored Data")
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ControllerResponse> getAllRewards(){
-        ControllerResponse<?> response = service.GetAll();
+        ControllerResponse<?> response = service.getAll();
         return ResponseEntity.ok(response);
     }
 
@@ -34,7 +32,7 @@ public class RewardsController {
     )
     @PreAuthorize("hasRole('SUPER_ADMIN')")
     public ResponseEntity<?> createNewReward(@RequestBody RewardsCreateRequest request){
-            ControllerResponse<?> response = service.Create(request);
+            ControllerResponse<?> response = service.create(request);
             return  ResponseEntity.ok(response);
     }
 }

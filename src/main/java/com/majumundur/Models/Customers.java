@@ -25,4 +25,6 @@ public class Customers {
     private Date birthDate;
     private String email;
     private String password;
+    @Column(name = "reward_points")
+    private Integer rewardPoints;
 }

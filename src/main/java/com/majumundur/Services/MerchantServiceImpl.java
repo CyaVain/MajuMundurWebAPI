@@ -16,7 +16,7 @@ public class MerchantServiceImpl implements MerchantService {
     }
     @Transactional
     @Override
-    public Merchants Save(MerchantCreateRequest request, UserCredentials credentials) {
+    public Merchants save(MerchantCreateRequest request, UserCredentials credentials) {
         Merchants merchant = Merchants.builder()
                 .name(request.getName())
                 .phoneNumber(request.getPhoneNumber())

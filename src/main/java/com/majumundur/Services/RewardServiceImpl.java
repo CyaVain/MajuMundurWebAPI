@@ -22,7 +22,7 @@ public class RewardServiceImpl implements  RewardService{
         this.validation = validation;
     }
     @Override
-    public ControllerResponse<List<RewardsResponse>> GetAll() {
+    public ControllerResponse<List<RewardsResponse>> getAll() {
         List<Rewards> rewards = repository.findAll();
         List<RewardsResponse> dto = new ArrayList<>();
         ControllerResponse<List<RewardsResponse>> response = new ControllerResponse<>();
@@ -45,7 +45,7 @@ public class RewardServiceImpl implements  RewardService{
     //Penambahan Annotasi @Transactional Untuk Menandakan Bahwa Ini Process Transaction Pada Database
     @Transactional
     @Override
-    public ControllerResponse<?> Create(RewardsCreateRequest request){
+    public ControllerResponse<?> create(RewardsCreateRequest request){
 
             List<String> violations = validation.validate(request);
             if(violations != null) {

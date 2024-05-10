@@ -6,5 +6,5 @@ import com.majumundur.Security.Models.UserCredentials;
 
 public interface CustomerService {
 
-    public Customers Save(CustomerCreateRequest request, UserCredentials credentials);
+    public Customers save(CustomerCreateRequest request, UserCredentials credentials);
 }

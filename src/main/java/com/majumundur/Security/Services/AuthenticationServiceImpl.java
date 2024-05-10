@@ -101,7 +101,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                     .build();
             repository.saveAndFlush(credentials);
 
-            Merchants merchant = merchantService.Save(request, credentials);
+            Merchants merchant = merchantService.save(request, credentials);
             MerchantCreatedResponse dto = MerchantCreatedResponse.builder()
                     .merchantId(merchant.getId())
                     .merchantName(merchant.getName())
@@ -157,11 +157,12 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                     .build();
             repository.saveAndFlush(credentials);
 
-            Customers customer = customerService.Save(request, credentials);
+            Customers customer = customerService.save(request, credentials);
             CustomerCreatedResponse dto = CustomerCreatedResponse.builder()
                     .customerId(customer.getId())
                     .customerName(customer.getName())
                     .customerEmail(customer.getEmail())
+                    .customerPoints(customer.getRewardPoints())
                     .customerPhoneNumber(customer.getPhoneNumber())
                     .customerBirthDate(customer.getBirthDate().toString())
                     .role(RoleEnum.ROLE_CUSTOMER)
