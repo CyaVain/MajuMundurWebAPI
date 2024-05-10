@@ -24,5 +24,5 @@ public class Customers {
     @Column(name = "birth_date")
     private Date birthDate;
     private String email;
-//    private String password;
+    private String password;
 }

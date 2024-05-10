@@ -10,6 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.annotation.Secured;
 
 @RestController
 @Tag(name = "Rewards Controller", description = "Controller To Upload New Rewards, View All Rewards, Search Rewards By It's Code / Name")
@@ -32,8 +33,8 @@ public class RewardsController {
             consumes = MediaType.APPLICATION_JSON_VALUE
     )
     @PreAuthorize("hasRole('SUPER_ADMIN')")
-    public ResponseEntity<ControllerResponse> CreateNewReward(@RequestBody RewardsCreateRequest request){
-        ControllerResponse<?> response = service.Create(request);
-        return  ResponseEntity.status(HttpStatus.CREATED).body(response);
+    public ResponseEntity<?> CreateNewReward(@RequestBody RewardsCreateRequest request){
+            ControllerResponse<?> response = service.Create(request);
+            return  ResponseEntity.ok(response);
     }
 }

@@ -1,11 +1,10 @@
 package com.majumundur.Services;
 
-import com.majumundur.Models.DTO.Requests.CustomersCreateRequest;
-import com.majumundur.Models.DTO.Responses.ControllerResponse;
+import com.majumundur.Models.Customers;
+import com.majumundur.Security.DTO.Request.CustomerCreateRequest;
+import com.majumundur.Security.Models.UserCredentials;
 
 public interface CustomerService {
 
-    public ControllerResponse<?> Create(CustomersCreateRequest request);
-    public ControllerResponse<?> GetById(String id);
-    public ControllerResponse<?> GetAll();
+    public Customers Create(CustomerCreateRequest request, UserCredentials credentials);
 }

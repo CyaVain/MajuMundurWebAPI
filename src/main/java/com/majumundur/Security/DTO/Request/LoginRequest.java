@@ -1,4 +1,4 @@
-package com.majumundur.Security.DTO;
+package com.majumundur.Security.DTO.Request;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;

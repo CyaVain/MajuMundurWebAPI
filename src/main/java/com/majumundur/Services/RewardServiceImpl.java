@@ -46,40 +46,50 @@ public class RewardServiceImpl implements  RewardService{
     @Transactional
     @Override
     public ControllerResponse<?> Create(RewardsCreateRequest request){
-        List<String> violations = validation.validate(request);
-        if(violations != null) {
-            ControllerResponse<List<String>> response = new ControllerResponse<>();
-            response.setStatusCode(HttpStatus.BAD_REQUEST.value());
-            response.setMessage(HttpStatus.BAD_REQUEST.getReasonPhrase());
-            response.setData(violations);
+
+            List<String> violations = validation.validate(request);
+            if(violations != null) {
+                ControllerResponse<List<String>> response = new ControllerResponse<>();
+                response.setStatusCode(HttpStatus.BAD_REQUEST.value());
+                response.setMessage(HttpStatus.BAD_REQUEST.getReasonPhrase());
+                response.setData(violations);
+                return response;
+            }
+        try{
+            if(repository.findByCode(request.getRewardsCode()) != null){
+                ControllerResponse<List<String>> response = new ControllerResponse<>();
+                response.setStatusCode(HttpStatus.OK.value());
+                response.setMessage("Reward Already Exists");
+                return response;
+            }
+            //Contoh pemanfaatan Builder milik Lombok
+            Rewards reward = Rewards.builder()
+                    .code(request.getRewardsCode())
+                    .name(request.getRewardsName())
+                    .point(request.getRequiredPoints())
+                    .build();
+
+            repository.save(reward);
+
+            RewardsResponse rewardsResponse = RewardsResponse.builder()
+                    .rewardsCode(reward.getCode())
+                    .rewardsName(reward.getName())
+                    .rewardsPoint(reward.getPoint())
+                    .build();
+
+            ControllerResponse<RewardsResponse> response = ControllerResponse.<RewardsResponse>builder()
+                    .statusCode(HttpStatus.CREATED.value())
+                    .message(HttpStatus.CREATED.getReasonPhrase())
+                    .data(rewardsResponse)
+                    .build();
             return response;
         }
-        if(repository.findByCode(request.getRewardsCode()) != null){
-            ControllerResponse<List<String>> response = new ControllerResponse<>();
-            response.setStatusCode(HttpStatus.OK.value());
-            response.setMessage("Reward Already Exists");
+        catch (Exception e){
+            ControllerResponse<String> response = new ControllerResponse<>();
+            response.setStatusCode(HttpStatus.FORBIDDEN.value());
+            response.setMessage(HttpStatus.FORBIDDEN.getReasonPhrase());
+            response.setData(e.getMessage());
             return response;
         }
-        //Contoh pemanfaatan Builder milik Lombok
-        Rewards reward = Rewards.builder()
-                .code(request.getRewardsCode())
-                .name(request.getRewardsName())
-                .point(request.getRequiredPoints())
-                .build();
-
-        repository.save(reward);
-
-        RewardsResponse rewardsResponse = RewardsResponse.builder()
-                .rewardsCode(reward.getCode())
-                .rewardsName(reward.getName())
-                .rewardsPoint(reward.getPoint())
-                .build();
-
-        ControllerResponse<RewardsResponse> response = ControllerResponse.<RewardsResponse>builder()
-                .statusCode(HttpStatus.CREATED.value())
-                .message(HttpStatus.CREATED.getReasonPhrase())
-                .data(rewardsResponse)
-                .build();
-        return response;
     }
 }
