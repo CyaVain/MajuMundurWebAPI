@@ -2,7 +2,7 @@ package com.majumundur.Controllers;
 
 import com.majumundur.Models.DTO.Responses.ControllerResponse;
 import com.majumundur.Models.DTO.Requests.RewardsCreateRequest;
-import com.majumundur.Services.RewardService;
+import com.majumundur.Services.RewardsService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.MediaType;
@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "Rewards Controller", description = "Controller To Upload New Rewards, View All Rewards, Search Rewards By It's Code / Name")
 @RequestMapping("/api/rewards")
 public class RewardsController {
-    private RewardService service;
-    public RewardsController(RewardService service){
+    private RewardsService service;
+    public RewardsController(RewardsService service){
         this.service = service;
     }
 

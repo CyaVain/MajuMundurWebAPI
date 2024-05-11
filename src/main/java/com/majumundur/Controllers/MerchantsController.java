@@ -3,8 +3,7 @@ package com.majumundur.Controllers;
 import com.majumundur.Models.DTO.Requests.ProductCreateRequest;
 import com.majumundur.Models.DTO.Requests.ProductUpdateRequest;
 import com.majumundur.Models.DTO.Responses.ControllerResponse;
-import com.majumundur.Models.Merchants;
-import com.majumundur.Services.MerchantService;
+import com.majumundur.Services.MerchantsService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.PageRequest;
@@ -13,14 +12,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
-
 @RestController
 @Tag(name = "Merchants Controller", description = "Controller To Get Merchant Details by Id, Create, Update , & Delete New Product, View Merchant's Product List")
 @RequestMapping("/api/merchants")
 public class MerchantsController {
-    private MerchantService service;
-    public MerchantsController(MerchantService service){
+    private MerchantsService service;
+    public MerchantsController(MerchantsService service){
         this.service = service;
     }
 
@@ -31,7 +28,7 @@ public class MerchantsController {
         return ResponseEntity.ok(response);
     }
 
-    @Operation(summary = "Create New Product " , description = "Create A Product, MERCHANTS & SUPER_ADMIN ONLY !!")
+    @Operation(summary = "Create New Product " , description = "Create A Product, MERCHANTS OR SUPER_ADMIN ONLY !!")
     @PreAuthorize("hasAnyRole('MERCHANT','SUPER_ADMIN')")
     @PostMapping("/{merchantId}/add-product")
     public ResponseEntity<?> addProduct(@RequestBody ProductCreateRequest request,
@@ -41,7 +38,7 @@ public class MerchantsController {
         return ResponseEntity.ok(response);
     }
 
-    @Operation(summary = "Update Product " , description = "Update A Product, MERCHANTS & SUPER_ADMIN ONLY !!")
+    @Operation(summary = "Update Product " , description = "Update A Product, MERCHANTS OR SUPER_ADMIN ONLY !!")
     @PreAuthorize("hasAnyRole('MERCHANT','SUPER_ADMIN')")
     @PutMapping("/{merchantId}/update-product")
     public ResponseEntity<?> updateProduct(@RequestBody ProductUpdateRequest request,
@@ -50,7 +47,7 @@ public class MerchantsController {
         return ResponseEntity.ok(response);
     }
 
-    @Operation(summary = "Delete A Product " , description = "Delete A Product By It's Product Id, MERCHANT & SUPER_ADMIN ONLY !!")
+    @Operation(summary = "Delete A Product " , description = "Delete A Product By It's Product Id, MERCHANT OR SUPER_ADMIN ONLY !!")
     @PreAuthorize("hasAnyRole('MERCHANT','SUPER_ADMIN')")
     @DeleteMapping("/{merchantId}/products/{productId}")
     public ResponseEntity<?> deleteProduct(@PathVariable String productId,

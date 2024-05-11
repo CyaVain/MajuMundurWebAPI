@@ -4,7 +4,7 @@ import com.majumundur.Models.Customers;
 import com.majumundur.Models.DTO.Responses.ControllerResponse;
 import com.majumundur.Models.DTO.Responses.CustomerDetailsResponse;
 import com.majumundur.Security.Models.DTO.Request.CustomerCreateRequest;
-import com.majumundur.Repositories.CustomerRepository;
+import com.majumundur.Repositories.CustomersRepository;
 import com.majumundur.Security.Models.UserCredentials;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -14,11 +14,11 @@ import java.sql.Date;
 import java.util.Optional;
 
 @Service
-public class CustomerServiceImpl implements CustomerService {
+public class CustomersServiceImpl implements CustomersService {
 
-    private CustomerRepository repository;
+    private CustomersRepository repository;
 
-    public CustomerServiceImpl(CustomerRepository repository) {
+    public CustomersServiceImpl(CustomersRepository repository) {
         this.repository = repository;
     }
 
@@ -71,6 +71,15 @@ public class CustomerServiceImpl implements CustomerService {
                 .password(credentials.getPassword())
                 .rewardPoints(0)
                 .build();
+        repository.save(customer);
+
+        return customer;
+    }
+
+    @Override
+    public Customers savePoint(Customers customer, Integer points) {
+        customer.setId(customer.getId());
+        customer.setRewardPoints(customer.getRewardPoints() + points);
         repository.save(customer);
 
         return customer;

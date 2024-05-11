@@ -4,7 +4,7 @@ import com.majumundur.Models.DTO.Responses.ControllerResponse;
 import com.majumundur.Models.DTO.Requests.RewardsCreateRequest;
 import com.majumundur.Models.DTO.Responses.RewardResponse;
 import com.majumundur.Models.Rewards;
-import com.majumundur.Repositories.RewardRepository;
+import com.majumundur.Repositories.RewardsRepository;
 import jakarta.annotation.PostConstruct;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -14,11 +14,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class RewardServiceImpl implements  RewardService{
-    private RewardRepository repository;
+public class RewardsServiceImpl implements RewardsService {
+    private RewardsRepository repository;
     private ValidationService validation;
 
-    public RewardServiceImpl(RewardRepository repository, ValidationService validation){
+    public RewardsServiceImpl(RewardsRepository repository, ValidationService validation){
         this.repository = repository;
         this.validation = validation;
     }

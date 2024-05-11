@@ -2,21 +2,19 @@ package com.majumundur.Services;
 
 import com.majumundur.Models.DTO.Requests.ProductCreateRequest;
 import com.majumundur.Models.DTO.Requests.ProductUpdateRequest;
-import com.majumundur.Models.Merchants;
 import com.majumundur.Models.Products;
-import com.majumundur.Repositories.ProductRepository;
+import com.majumundur.Repositories.ProductsRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ProductServiceImpl implements ProductService {
-    private ProductRepository repository;
+public class ProductsServiceImpl implements ProductsService {
+    private ProductsRepository repository;
 
-    public ProductServiceImpl(ProductRepository repository) {
+    public ProductsServiceImpl(ProductsRepository repository) {
         this.repository = repository;
     }
 

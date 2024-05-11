@@ -1,7 +1,7 @@
 package com.majumundur.Controllers;
 
 import com.majumundur.Models.DTO.Responses.ControllerResponse;
-import com.majumundur.Services.CustomerService;
+import com.majumundur.Services.CustomersService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/customers")
 public class CustomerController {
 
-    private CustomerService service;
+    private CustomersService service;
 
-    public CustomerController(CustomerService service) {
+    public CustomerController(CustomersService service) {
         this.service = service;
     }
 

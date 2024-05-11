@@ -32,7 +32,7 @@ public class ProductCreateRequest {
     @Size(min = 10, max = 200, message = "Description Must Between 10 and 200 Characters")
     private String description;
 
-    @Schema(example = "75000.250")
+    @Schema(example = "35000")
     @NotNull(message = "Price must not be null")
     @DecimalMin(value = "0.0", message = "Price must be greater than or equal to 0.0")
     private Double price;

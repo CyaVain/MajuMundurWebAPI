@@ -5,7 +5,7 @@ import com.majumundur.Models.DTO.Requests.ProductUpdateRequest;
 import com.majumundur.Models.DTO.Responses.*;
 import com.majumundur.Models.Merchants;
 import com.majumundur.Models.Products;
-import com.majumundur.Repositories.MerchantRepository;
+import com.majumundur.Repositories.MerchantsRepository;
 import com.majumundur.Security.Models.DTO.Request.MerchantCreateRequest;
 import com.majumundur.Security.Models.UserCredentials;
 import org.springframework.data.domain.Page;
@@ -19,15 +19,15 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class MerchantServiceImpl implements MerchantService {
-    private MerchantRepository repository;
-    private ProductService productService;
+public class MerchantsServiceImpl implements MerchantsService {
+    private MerchantsRepository repository;
+    private ProductsService productsService;
     private ValidationService validation;
     private final static String NOT_FOUND_MESSAGE = "Merchant Not Found / Invalid Merchant Id";
 
-    public MerchantServiceImpl(MerchantRepository repository, ProductService productService, ValidationService validation) {
+    public MerchantsServiceImpl(MerchantsRepository repository, ProductsService productsService, ValidationService validation) {
         this.repository = repository;
-        this.productService = productService;
+        this.productsService = productsService;
         this.validation = validation;
     }
 
@@ -104,7 +104,7 @@ public class MerchantServiceImpl implements MerchantService {
                 return response;
             }
 
-            if(productService.getProductByCode(request.getCode()) != null){
+            if(productsService.getProductByCode(request.getCode()) != null){
                 ControllerResponse<String> response = new ControllerResponse<>();
                 response.setStatusCode(HttpStatus.CONFLICT.value());
                 response.setMessage(HttpStatus.CONFLICT.getReasonPhrase());
@@ -112,9 +112,9 @@ public class MerchantServiceImpl implements MerchantService {
                 return response;
             }
 
-            Products product = productService.createNewProduct(request);
+            Products product = productsService.createNewProduct(request);
             product.setMerchant(merchant);
-            productService.save(product);
+            productsService.save(product);
 
             List<Products> productsList = merchant.getProductsList();
             productsList.add(product);
@@ -170,7 +170,7 @@ public class MerchantServiceImpl implements MerchantService {
                 return response;
             }
 
-            if(productService.getProduct(request.getProductId()) == null){
+            if(productsService.getProduct(request.getProductId()) == null){
                 ControllerResponse<String> response = new ControllerResponse<>();
                 response.setStatusCode(HttpStatus.NOT_FOUND.value());
                 response.setMessage(HttpStatus.NOT_FOUND.getReasonPhrase());
@@ -178,8 +178,8 @@ public class MerchantServiceImpl implements MerchantService {
                 return response;
             }
 
-            Products product = productService.updateProduct(request);
-            productService.save(product);
+            Products product = productsService.updateProduct(request);
+            productsService.save(product);
 
             List<Products> productsList = merchant.getProductsList();
             merchant.setProductsList(productsList);
@@ -223,7 +223,7 @@ public class MerchantServiceImpl implements MerchantService {
                 response.setData(NOT_FOUND_MESSAGE);
                 return response;
             }
-            Page<Products> products = productService.getAllProducts(pageable,merchantId);
+            Page<Products> products = productsService.getAllProducts(pageable,merchantId);
             if(products.isEmpty()){
                 ControllerResponse<String> response = new ControllerResponse<>();
                 response.setStatusCode(HttpStatus.NOT_FOUND.value());
@@ -282,7 +282,7 @@ public class MerchantServiceImpl implements MerchantService {
                 response.setData(NOT_FOUND_MESSAGE);
                 return response;
             }
-            Products product = productService.getProduct(productId);
+            Products product = productsService.getProduct(productId);
             if(product == null){
                 ControllerResponse<String> response = new ControllerResponse<>();
                 response.setStatusCode(HttpStatus.NOT_FOUND.value());
@@ -293,7 +293,7 @@ public class MerchantServiceImpl implements MerchantService {
             List<Products> productsList = merchant.getProductsList();
             productsList.remove(product);
 
-            productService.deleteProduct(product);
+            productsService.deleteProduct(product);
             ControllerResponse<String> response = ControllerResponse.<String>builder()
                     .statusCode(HttpStatus.OK.value())
                     .message(HttpStatus.OK.getReasonPhrase())
@@ -323,7 +323,7 @@ public class MerchantServiceImpl implements MerchantService {
                 response.setData(NOT_FOUND_MESSAGE);
                 return response;
             }
-            Products product = productService.getProduct(productId);
+            Products product = productsService.getProduct(productId);
             if(product == null){
                 ControllerResponse<String> response = new ControllerResponse<>();
                 response.setStatusCode(HttpStatus.NOT_FOUND.value());

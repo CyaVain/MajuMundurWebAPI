@@ -28,6 +28,4 @@ public class Transactions {
 
     @ManyToOne
     private Merchants merchants;
-
-
 }

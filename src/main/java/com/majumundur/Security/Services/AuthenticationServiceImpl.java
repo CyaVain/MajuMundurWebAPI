@@ -12,8 +12,8 @@ import com.majumundur.Security.Models.DTO.Response.MerchantCreatedResponse;
 import com.majumundur.Security.Models.Roles;
 import com.majumundur.Security.Models.UserCredentials;
 import com.majumundur.Security.Repositories.UserCredentialsRepository;
-import com.majumundur.Services.CustomerService;
-import com.majumundur.Services.MerchantService;
+import com.majumundur.Services.CustomersService;
+import com.majumundur.Services.MerchantsService;
 import com.majumundur.Services.ValidationService;
 import com.majumundur.Utils.RoleEnum;
 import jakarta.annotation.PostConstruct;
@@ -26,7 +26,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,18 +37,18 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private AuthenticationManager authenticationManager;
     private ValidationService validation;
     private UserCredentialsRepository repository;
-    private CustomerService customerService;
-    private MerchantService merchantService;
+    private CustomersService customersService;
+    private MerchantsService merchantsService;
 
-    public AuthenticationServiceImpl(PasswordEncoder encoder, RolesService rolesService, JwtUtils jwtUtils, AuthenticationManager authenticationManager, ValidationService validation, UserCredentialsRepository repository, CustomerService customerService, MerchantService merchantService) {
+    public AuthenticationServiceImpl(PasswordEncoder encoder, RolesService rolesService, JwtUtils jwtUtils, AuthenticationManager authenticationManager, ValidationService validation, UserCredentialsRepository repository, CustomersService customersService, MerchantsService merchantsService) {
         this.encoder = encoder;
         this.rolesService = rolesService;
         this.jwtUtils = jwtUtils;
         this.authenticationManager = authenticationManager;
         this.validation = validation;
         this.repository = repository;
-        this.customerService = customerService;
-        this.merchantService = merchantService;
+        this.customersService = customersService;
+        this.merchantsService = merchantsService;
     }
 
     // Annotasi Untuk Menjalanan Method Setelah Build
@@ -102,7 +101,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                     .build();
             repository.saveAndFlush(credentials);
 
-            Merchants merchant = merchantService.save(request, credentials);
+            Merchants merchant = merchantsService.save(request, credentials);
             MerchantCreatedResponse dto = MerchantCreatedResponse.builder()
                     .merchantId(merchant.getId())
                     .merchantName(merchant.getName())
@@ -158,7 +157,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                     .build();
             repository.saveAndFlush(credentials);
 
-            Customers customer = customerService.save(request, credentials);
+            Customers customer = customersService.save(request, credentials);
             CustomerCreatedResponse dto = CustomerCreatedResponse.builder()
                     .customerId(customer.getId())
                     .customerName(customer.getName())

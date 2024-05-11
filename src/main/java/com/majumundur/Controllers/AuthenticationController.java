@@ -5,7 +5,7 @@ import com.majumundur.Security.Models.DTO.Request.CustomerCreateRequest;
 import com.majumundur.Security.Models.DTO.Request.LoginRequest;
 import com.majumundur.Security.Models.DTO.Request.MerchantCreateRequest;
 import com.majumundur.Security.Services.AuthenticationService;
-import com.majumundur.Services.ProductService;
+import com.majumundur.Services.ProductsService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +20,7 @@ public class AuthenticationController {
     private AuthenticationService service;
 
     @Autowired
-    public ProductService productService;
+    public ProductsService productsService;
 
     public AuthenticationController(AuthenticationService service){
         this.service = service;
