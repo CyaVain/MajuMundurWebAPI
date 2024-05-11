@@ -8,6 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class RewardResponse {
+    private String rewardsId;
     private String rewardsCode;
     private String rewardsName;
     private Integer requiredPoints;

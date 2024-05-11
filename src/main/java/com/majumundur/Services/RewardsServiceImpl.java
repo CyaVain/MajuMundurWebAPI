@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RewardsServiceImpl implements RewardsService {
@@ -49,6 +50,7 @@ public class RewardsServiceImpl implements RewardsService {
 
         for(Rewards r : rewards){
             RewardResponse rewardsResponse = new RewardResponse();
+            rewardsResponse.setRewardsId(r.getId());
             rewardsResponse.setRewardsCode(r.getCode());
             rewardsResponse.setRewardsName(r.getName());
             rewardsResponse.setRequiredPoints(r.getPoint());
@@ -91,6 +93,7 @@ public class RewardsServiceImpl implements RewardsService {
             repository.save(reward);
 
             RewardResponse rewardsResponse = RewardResponse.builder()
+                    .rewardsId(reward.getId())
                     .rewardsCode(reward.getCode())
                     .rewardsName(reward.getName())
                     .requiredPoints(reward.getPoint())
@@ -110,5 +113,14 @@ public class RewardsServiceImpl implements RewardsService {
             response.setData(e.getMessage());
             return response;
         }
+    }
+
+    @Override
+    public Rewards getReward(String id) {
+        Optional<Rewards> reward = repository.findById(id);
+        if(reward.isEmpty()){
+            return null;
+        }
+        return reward.get();
     }
 }

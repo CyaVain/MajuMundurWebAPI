@@ -78,8 +78,19 @@ public class CustomersServiceImpl implements CustomersService {
 
     @Override
     public Customers savePoint(Customers customer, Integer points) {
+        //Dilakukan SetId karena pada Models GeneratedValue UUID
+        //Sehingga apabila ada perubahan repository.save() maka ID akan terus berubah jika tidak di set
         customer.setId(customer.getId());
         customer.setRewardPoints(customer.getRewardPoints() + points);
+        repository.save(customer);
+
+        return customer;
+    }
+
+    @Override
+    public Customers reducePoint(Customers customer, Integer points) {
+        customer.setId(customer.getId());
+        customer.setRewardPoints(customer.getRewardPoints() - points);
         repository.save(customer);
 
         return customer;

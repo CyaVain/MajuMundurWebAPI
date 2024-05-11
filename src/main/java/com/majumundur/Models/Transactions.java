@@ -19,7 +19,6 @@ public class Transactions {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @CreatedDate
     @Column(name = "purchase_date")
     private Date purchaseDate;
 

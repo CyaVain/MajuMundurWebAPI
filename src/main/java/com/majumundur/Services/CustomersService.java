@@ -11,6 +11,7 @@ public interface CustomersService {
 
     public Customers save(CustomerCreateRequest request, UserCredentials credentials);
 
+    public Customers reducePoint(Customers customer, Integer points);
     public Customers savePoint(Customers customer, Integer points);
     public Customers getCustomer(String id);
 }

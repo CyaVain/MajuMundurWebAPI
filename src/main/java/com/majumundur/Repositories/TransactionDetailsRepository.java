@@ -7,8 +7,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import java.util.List;
 
-//JpaSpecificationExector Untuk menerapkan Specification Untuk Class TransactionDetails
-public interface TransactionDetailsRepository extends JpaRepository<TransactionDetails, String>, JpaSpecificationExecutor<TransactionDetails> {
+public interface TransactionDetailsRepository extends JpaRepository<TransactionDetails, String>{
 
     TransactionDetails findByTransaction_Id(String transactionId);
 }

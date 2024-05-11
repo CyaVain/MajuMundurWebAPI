@@ -14,7 +14,5 @@ public interface RewardsService {
     //Penggunaan WildCard (?) untuk menghandle agar ControllerResponse dapat menerima Object Lain yang lebih fleksibel
     public ControllerResponse<?> create(RewardsCreateRequest request);
 
-    public ControllerResponse<?> redeemReward(String rewardsId);
-
-    public Rewards getReward(String rewardsId);
+    public Rewards getReward(String id);
 }
