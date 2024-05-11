@@ -1,6 +1,7 @@
 package com.majumundur.Services;
 
 import com.majumundur.Models.DTO.Requests.ProductCreateRequest;
+import com.majumundur.Models.DTO.Requests.ProductUpdateRequest;
 import com.majumundur.Models.Merchants;
 import com.majumundur.Models.Products;
 import com.majumundur.Repositories.ProductRepository;
@@ -27,6 +28,25 @@ public class ProductServiceImpl implements ProductService {
                 .build();
         repository.save(product);
         return product;
+    }
+
+    @Override
+    public Products updateProduct(ProductUpdateRequest request) {
+        Products products = getProduct(request.getProductId());
+        products.setId(request.getProductId());
+        products.setName(request.getName());
+        products.setCode(request.getCode());
+        products.setPrice(request.getPrice());
+        products.setDescription(request.getDescription());
+        products.setMerchant(products.getMerchant());
+        repository.save(products);
+
+        return products;
+    }
+
+    @Override
+    public Products getProduct(String id) {
+        return repository.findById(id).get();
     }
 
     @Override

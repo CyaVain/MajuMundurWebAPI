@@ -1,9 +1,10 @@
 package com.majumundur.Services;
 
 import com.majumundur.Models.DTO.Requests.ProductCreateRequest;
+import com.majumundur.Models.DTO.Requests.ProductUpdateRequest;
 import com.majumundur.Models.DTO.Responses.ControllerResponse;
 import com.majumundur.Models.DTO.Responses.MerchantResponse;
-import com.majumundur.Models.DTO.Responses.ProductCreatedResponse;
+import com.majumundur.Models.DTO.Responses.ProductResponse;
 import com.majumundur.Models.Merchants;
 import com.majumundur.Models.Products;
 import com.majumundur.Repositories.MerchantRepository;
@@ -118,7 +119,7 @@ public class MerchantServiceImpl implements MerchantService {
             merchant.setProductsList(productsList);
             repository.save(merchant);
 
-            ProductCreatedResponse dto = ProductCreatedResponse.builder()
+            ProductResponse dto = ProductResponse.builder()
                     .merchantId(merchant.getId())
                     .merchantName(merchant.getName())
                     .productId(product.getId())
@@ -128,7 +129,70 @@ public class MerchantServiceImpl implements MerchantService {
                     .productPrice(product.getPrice())
                     .build();
 
-            ControllerResponse<ProductCreatedResponse> response = ControllerResponse.<ProductCreatedResponse>builder()
+            ControllerResponse<ProductResponse> response = ControllerResponse.<ProductResponse>builder()
+                    .statusCode(HttpStatus.CREATED.value())
+                    .message(HttpStatus.CREATED.getReasonPhrase())
+                    .data(dto)
+                    .build();
+
+            return response;
+        }
+        catch (Exception e){
+            ControllerResponse<String> response = new ControllerResponse<>();
+            response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+            response.setMessage(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
+            response.setData(e.getMessage());
+            return  response;
+        }
+    }
+
+    @Override
+    public ControllerResponse<?> updateProduct(ProductUpdateRequest request, String merchantId) {
+        try{
+            List<String> violations = validation.validate(request);
+            if(violations != null) {
+                ControllerResponse<List<String>> response = new ControllerResponse<>();
+                response.setStatusCode(HttpStatus.BAD_REQUEST.value());
+                response.setMessage(HttpStatus.BAD_REQUEST.getReasonPhrase());
+                response.setData(violations);
+                return response;
+            }
+            Merchants merchant = getMerchant(merchantId);
+
+            if(merchant == null){
+                ControllerResponse<String> response = new ControllerResponse<>();
+                response.setStatusCode(HttpStatus.NOT_FOUND.value());
+                response.setMessage(HttpStatus.NOT_FOUND.getReasonPhrase());
+                response.setData("Merchant Not Found / Invalid Merchant Id");
+                return response;
+            }
+
+            if(productService.getProduct(request.getProductId()) == null){
+                ControllerResponse<String> response = new ControllerResponse<>();
+                response.setStatusCode(HttpStatus.NOT_FOUND.value());
+                response.setMessage(HttpStatus.NOT_FOUND.getReasonPhrase());
+                response.setData("Product Not Found / Invalid Product Id");
+                return response;
+            }
+
+            Products product = productService.updateProduct(request);
+            productService.save(product);
+
+            List<Products> productsList = merchant.getProductsList();
+            merchant.setProductsList(productsList);
+            repository.save(merchant);
+
+            ProductResponse dto = ProductResponse.builder()
+                    .merchantId(merchant.getId())
+                    .merchantName(merchant.getName())
+                    .productId(product.getId())
+                    .productName(product.getName())
+                    .productCode(product.getCode())
+                    .productDescription(product.getDescription())
+                    .productPrice(product.getPrice())
+                    .build();
+
+            ControllerResponse<ProductResponse> response = ControllerResponse.<ProductResponse>builder()
                     .statusCode(HttpStatus.CREATED.value())
                     .message(HttpStatus.CREATED.getReasonPhrase())
                     .data(dto)

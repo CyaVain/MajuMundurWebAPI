@@ -7,7 +7,7 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
-public class ProductCreatedResponse {
+public class ProductResponse {
 
     private String merchantId;
     private String merchantName;
