@@ -38,4 +38,12 @@ public class TransactionsController {
         ControllerResponse<?> response = service.getTransactionHistory(transactionId);
         return ResponseEntity.ok(response);
     }
+
+    @Operation(summary = "View Customer's History" , description = "View Customer's Transaction History, CUSTOMER, MERCHANT, OR SUPER_ADMIN ONLY")
+    @PreAuthorize("hasAnyRole('CUSTOMER','SUPER_ADMIN','MERCHANT')")
+    @GetMapping()
+    public ResponseEntity<?> getCustomerHistories(){
+        ControllerResponse<?> response = service.getCustomerHistories();
+        return ResponseEntity.ok(response);
+    }
 }

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -154,5 +155,37 @@ public class TransactionsServiceImpl implements TransactionsService {
             response.setData(e.getMessage());
             return  response;
         }
+    }
+
+    @Override
+    public ControllerResponse<?> getCustomerHistories() {
+
+        List<Transactions> transactions = repository.findAll();
+        List<TransactionDetailsResponse> dto = new ArrayList<>();
+        //Looping Untuk Melakukan Mapping Untuk DTO
+        for(Transactions tr : transactions){
+            //Deklarasikan transactionDetails untuk setiap perulangan / looping berdasarkan Transactions Id
+            TransactionDetails details = detailsService.getDetails(tr.getId());
+
+            TransactionDetailsResponse data = TransactionDetailsResponse.builder()
+                    .transactionDate(tr.getPurchaseDate().toString())
+                    .customerId(tr.getCustomer().getId())
+                    .customerName(tr.getCustomer().getName())
+                    .productId(details.getProducts().getId())
+                    .productName(details.getProducts().getName())
+                    .productCode(details.getProducts().getCode())
+                    .salesPrice(details.getSalesPrice())
+                    .build();
+
+            dto.add(data);
+        }
+
+        ControllerResponse<List<TransactionDetailsResponse>> response = ControllerResponse.<List<TransactionDetailsResponse>>builder()
+                .statusCode(HttpStatus.OK.value())
+                .message(HttpStatus.OK.getReasonPhrase())
+                .data(dto)
+                .build();
+
+        return response;
     }
 }
