@@ -37,10 +37,12 @@ public class SecurityConfig {
                                 //Allow Akses Api Docs & Swagger UI
                                 .requestMatchers("/v3/api-docs/**").permitAll()
                                 .requestMatchers("/api/swagger/**").permitAll()
+                                //Allow akses untuk Login & Register
                                 .requestMatchers("/auth/**").permitAll()
                                 //GetAll() di RewardsController Tidak Perlu Authorized / Bisa Secara Anonymous
                                 .requestMatchers(HttpMethod.GET,"/api/rewards").permitAll()
-                                .requestMatchers(HttpMethod.GET,"/api/merchants/{id}").permitAll()
+                                .requestMatchers(HttpMethod.GET,"/api/merchants/{merchantId}").permitAll()
+                                .requestMatchers(HttpMethod.GET,"/api/merchants/{merchantId}/**").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)

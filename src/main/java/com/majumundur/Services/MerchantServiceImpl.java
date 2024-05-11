@@ -2,18 +2,19 @@ package com.majumundur.Services;
 
 import com.majumundur.Models.DTO.Requests.ProductCreateRequest;
 import com.majumundur.Models.DTO.Requests.ProductUpdateRequest;
-import com.majumundur.Models.DTO.Responses.ControllerResponse;
-import com.majumundur.Models.DTO.Responses.MerchantResponse;
-import com.majumundur.Models.DTO.Responses.ProductResponse;
+import com.majumundur.Models.DTO.Responses.*;
 import com.majumundur.Models.Merchants;
 import com.majumundur.Models.Products;
 import com.majumundur.Repositories.MerchantRepository;
 import com.majumundur.Security.Models.DTO.Request.MerchantCreateRequest;
 import com.majumundur.Security.Models.UserCredentials;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,6 +23,7 @@ public class MerchantServiceImpl implements MerchantService {
     private MerchantRepository repository;
     private ProductService productService;
     private ValidationService validation;
+    private final static String NOT_FOUND_MESSAGE = "Merchant Not Found / Invalid Merchant Id";
 
     public MerchantServiceImpl(MerchantRepository repository, ProductService productService, ValidationService validation) {
         this.repository = repository;
@@ -52,7 +54,7 @@ public class MerchantServiceImpl implements MerchantService {
                 ControllerResponse<String> response = new ControllerResponse<>();
                 response.setStatusCode(HttpStatus.NOT_FOUND.value());
                 response.setMessage(HttpStatus.NOT_FOUND.getReasonPhrase());
-                response.setData("Merchant Not Found / Invalid Merchant Id");
+                response.setData(NOT_FOUND_MESSAGE);
                 return response;
             }
             MerchantResponse dto = MerchantResponse.builder()
@@ -82,7 +84,7 @@ public class MerchantServiceImpl implements MerchantService {
 
     @Transactional
     @Override
-    public ControllerResponse<?> createProduct(ProductCreateRequest request) {
+    public ControllerResponse<?> createProduct(ProductCreateRequest request, String merchantId) {
         try{
             List<String> violations = validation.validate(request);
             if(violations != null) {
@@ -92,13 +94,13 @@ public class MerchantServiceImpl implements MerchantService {
                 response.setData(violations);
                 return response;
             }
-            Merchants merchant = getMerchant(request.getMerchantId());
+            Merchants merchant = getMerchant(merchantId);
 
             if(merchant == null){
                 ControllerResponse<String> response = new ControllerResponse<>();
                 response.setStatusCode(HttpStatus.NOT_FOUND.value());
                 response.setMessage(HttpStatus.NOT_FOUND.getReasonPhrase());
-                response.setData("Merchant Not Found / Invalid Merchant Id");
+                response.setData(NOT_FOUND_MESSAGE);
                 return response;
             }
 
@@ -146,6 +148,7 @@ public class MerchantServiceImpl implements MerchantService {
         }
     }
 
+    @Transactional
     @Override
     public ControllerResponse<?> updateProduct(ProductUpdateRequest request, String merchantId) {
         try{
@@ -163,7 +166,7 @@ public class MerchantServiceImpl implements MerchantService {
                 ControllerResponse<String> response = new ControllerResponse<>();
                 response.setStatusCode(HttpStatus.NOT_FOUND.value());
                 response.setMessage(HttpStatus.NOT_FOUND.getReasonPhrase());
-                response.setData("Merchant Not Found / Invalid Merchant Id");
+                response.setData(NOT_FOUND_MESSAGE);
                 return response;
             }
 
@@ -198,6 +201,150 @@ public class MerchantServiceImpl implements MerchantService {
                     .data(dto)
                     .build();
 
+            return response;
+        }
+        catch (Exception e){
+            ControllerResponse<String> response = new ControllerResponse<>();
+            response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+            response.setMessage(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
+            response.setData(e.getMessage());
+            return  response;
+        }
+    }
+
+    @Override
+    public ControllerResponse<?> viewProducts(Pageable pageable, String merchantId) {
+        try{
+            Merchants merchants = getMerchant(merchantId);
+            if(merchants == null){
+                ControllerResponse<String> response = new ControllerResponse<>();
+                response.setStatusCode(HttpStatus.NOT_FOUND.value());
+                response.setMessage(HttpStatus.NOT_FOUND.getReasonPhrase());
+                response.setData(NOT_FOUND_MESSAGE);
+                return response;
+            }
+            Page<Products> products = productService.getAllProducts(pageable,merchantId);
+            if(products.isEmpty()){
+                ControllerResponse<String> response = new ControllerResponse<>();
+                response.setStatusCode(HttpStatus.NOT_FOUND.value());
+                response.setMessage(HttpStatus.NOT_FOUND.getReasonPhrase());
+                response.setData("ProductList Is Empty");
+                return response;
+            }
+            List<ProductViewResponse> dto = new ArrayList<>();
+            for(Products p : products){
+                ProductViewResponse viewResponse = ProductViewResponse.builder()
+                        .merchantId(p.getMerchant().getId())
+                        .productId(p.getId())
+                        .name(p.getName())
+                        .code(p.getCode())
+                        .description(p.getDescription())
+                        .price(p.getPrice())
+                        .build();
+                dto.add(viewResponse);
+            }
+
+            PagingResponse<List<ProductViewResponse>> pagingResponse = PagingResponse.<List<ProductViewResponse>>builder()
+                    .totalElements((int)products.getTotalElements())
+                    .totalPages(products.getTotalPages())
+                    .currentPage(products.getNumber())
+                    .size(products.getSize())
+                    .data(dto)
+                    .build();
+
+            ControllerResponse<PagingResponse> response = new ControllerResponse<>();
+            response.setStatusCode(HttpStatus.OK.value());
+            response.setMessage(HttpStatus.OK.getReasonPhrase());
+            response.setData(pagingResponse);
+
+            return response;
+
+        }
+        catch (Exception e){
+            ControllerResponse<String> response = new ControllerResponse<>();
+            response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+            response.setMessage(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
+            response.setData(e.getMessage());
+            return  response;
+        }
+    }
+
+    @Transactional
+    @Override
+    public ControllerResponse<?> deleteProduct(String productId, String merchantId) {
+        try{
+            Merchants merchant = getMerchant(merchantId);
+            if(merchant == null)
+            {
+                ControllerResponse<String> response = new ControllerResponse<>();
+                response.setStatusCode(HttpStatus.NOT_FOUND.value());
+                response.setMessage(HttpStatus.NOT_FOUND.getReasonPhrase());
+                response.setData(NOT_FOUND_MESSAGE);
+                return response;
+            }
+            Products product = productService.getProduct(productId);
+            if(product == null){
+                ControllerResponse<String> response = new ControllerResponse<>();
+                response.setStatusCode(HttpStatus.NOT_FOUND.value());
+                response.setMessage(HttpStatus.NOT_FOUND.getReasonPhrase());
+                response.setData("Product Not Found / Invalid Product Id");
+                return response;
+            }
+            List<Products> productsList = merchant.getProductsList();
+            productsList.remove(product);
+
+            productService.deleteProduct(product);
+            ControllerResponse<String> response = ControllerResponse.<String>builder()
+                    .statusCode(HttpStatus.OK.value())
+                    .message(HttpStatus.OK.getReasonPhrase())
+                    .data("Product Deleted")
+                    .build();
+
+            return response;
+        }
+        catch (Exception e){
+            ControllerResponse<String> response = new ControllerResponse<>();
+            response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+            response.setMessage(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
+            response.setData(e.getMessage());
+            return  response;
+        }
+    }
+
+    @Override
+    public ControllerResponse<?> getProductDetails(String productId, String merchantId) {
+        try{
+            Merchants merchant = getMerchant(merchantId);
+            if(merchant == null)
+            {
+                ControllerResponse<String> response = new ControllerResponse<>();
+                response.setStatusCode(HttpStatus.NOT_FOUND.value());
+                response.setMessage(HttpStatus.NOT_FOUND.getReasonPhrase());
+                response.setData(NOT_FOUND_MESSAGE);
+                return response;
+            }
+            Products product = productService.getProduct(productId);
+            if(product == null){
+                ControllerResponse<String> response = new ControllerResponse<>();
+                response.setStatusCode(HttpStatus.NOT_FOUND.value());
+                response.setMessage(HttpStatus.NOT_FOUND.getReasonPhrase());
+                response.setData("Product Not Found / Invalid Product Id");
+                return response;
+            }
+
+            ProductViewResponse dto = ProductViewResponse.builder()
+                    .merchantId(product.getMerchant().getId())
+                    .productId(product.getId())
+                    .name(product.getName())
+                    .code(product.getCode())
+                    .description(product.getDescription())
+                    .price(product.getPrice())
+                    .build();
+
+            ControllerResponse<ProductViewResponse> response = new ControllerResponse<>();
+            response.setStatusCode(HttpStatus.OK.value());
+            response.setMessage(HttpStatus.OK.getReasonPhrase());
+            response.setData(dto);
             return response;
         }
         catch (Exception e){

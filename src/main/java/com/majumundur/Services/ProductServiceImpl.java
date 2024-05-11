@@ -5,8 +5,11 @@ import com.majumundur.Models.DTO.Requests.ProductUpdateRequest;
 import com.majumundur.Models.Merchants;
 import com.majumundur.Models.Products;
 import com.majumundur.Repositories.ProductRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -45,8 +48,22 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public Page<Products> getAllProducts(Pageable pageable, String merchantId) {
+        return repository.findByMerchant_Id(pageable,merchantId);
+    }
+
+    @Override
+    public void deleteProduct(Products products) {
+        repository.delete(products);
+    }
+
+    @Override
     public Products getProduct(String id) {
-        return repository.findById(id).get();
+        Optional<Products> product = repository.findById(id);
+        if(product.isEmpty()){
+            return  null;
+        }
+        return  product.get();
     }
 
     @Override

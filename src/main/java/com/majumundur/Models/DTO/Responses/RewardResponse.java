@@ -10,5 +10,5 @@ import lombok.*;
 public class RewardResponse {
     private String rewardsCode;
     private String rewardsName;
-    private Integer rewardsPoint;
+    private Integer requiredPoints;
 }

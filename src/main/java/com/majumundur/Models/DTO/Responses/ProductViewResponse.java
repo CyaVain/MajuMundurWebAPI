@@ -9,6 +9,7 @@ import lombok.*;
 @Builder
 public class ProductViewResponse {
 
+    private String merchantId;
     private String productId;
     private String name;
     private String code;

@@ -3,6 +3,7 @@ package com.majumundur.Services;
 import com.majumundur.Models.DTO.Responses.ControllerResponse;
 import com.majumundur.Models.DTO.Requests.RewardsCreateRequest;
 import com.majumundur.Models.DTO.Responses.RewardResponse;
+import com.majumundur.Models.Rewards;
 
 import java.util.List;
 

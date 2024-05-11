@@ -15,10 +15,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ProductCreateRequest {
-
-    @NotBlank(message = "MerchantId Must Not Be Empty")
-    private String merchantId;
-
     @Schema(example = "PRD001")
     @NotBlank(message = "Code must not be blank")
     @Size(min = 3, message = "Code is Too Short, Min 3 characters")

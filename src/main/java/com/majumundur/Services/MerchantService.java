@@ -6,12 +6,16 @@ import com.majumundur.Models.DTO.Responses.ControllerResponse;
 import com.majumundur.Models.Merchants;
 import com.majumundur.Security.Models.DTO.Request.MerchantCreateRequest;
 import com.majumundur.Security.Models.UserCredentials;
+import org.springframework.data.domain.Pageable;
 
 public interface MerchantService {
     public ControllerResponse<?> getById(String id);
-    public ControllerResponse<?> createProduct(ProductCreateRequest request);
+    public ControllerResponse<?> createProduct(ProductCreateRequest request, String merchantId);
     public ControllerResponse<?> updateProduct(ProductUpdateRequest request, String merchantId);
-    public Merchants save(MerchantCreateRequest request, UserCredentials credentials);
+    public ControllerResponse<?> viewProducts(Pageable pageable, String merchantId);
+    public ControllerResponse<?> getProductDetails(String productId, String merchantId);
 
+    public ControllerResponse<?> deleteProduct(String productId, String merchantId);
+    public Merchants save(MerchantCreateRequest request, UserCredentials credentials);
     public Merchants getMerchant(String id);
 }

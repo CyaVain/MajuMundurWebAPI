@@ -5,6 +5,7 @@ import com.majumundur.Models.DTO.Requests.RewardsCreateRequest;
 import com.majumundur.Models.DTO.Responses.RewardResponse;
 import com.majumundur.Models.Rewards;
 import com.majumundur.Repositories.RewardRepository;
+import jakarta.annotation.PostConstruct;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +22,22 @@ public class RewardServiceImpl implements  RewardService{
         this.repository = repository;
         this.validation = validation;
     }
+
+    @PostConstruct
+    public void initializeRewards(){
+        Rewards rewardA = Rewards.builder()
+                .code("A")
+                .name("Reward A")
+                .point(20)
+                .build();
+        Rewards rewardB = Rewards.builder()
+                .code("B")
+                .name("Reward B")
+                .point(40)
+                .build();
+        repository.save(rewardA);
+        repository.save(rewardB);
+    }
     @Override
     public ControllerResponse<List<RewardResponse>> getAll() {
         List<Rewards> rewards = repository.findAll();
@@ -31,7 +48,7 @@ public class RewardServiceImpl implements  RewardService{
             RewardResponse rewardsResponse = new RewardResponse();
             rewardsResponse.setRewardsCode(r.getCode());
             rewardsResponse.setRewardsName(r.getName());
-            rewardsResponse.setRewardsPoint(r.getPoint());
+            rewardsResponse.setRequiredPoints(r.getPoint());
 
             dto.add(rewardsResponse);
         }
@@ -73,7 +90,7 @@ public class RewardServiceImpl implements  RewardService{
             RewardResponse rewardsResponse = RewardResponse.builder()
                     .rewardsCode(reward.getCode())
                     .rewardsName(reward.getName())
-                    .rewardsPoint(reward.getPoint())
+                    .requiredPoints(reward.getPoint())
                     .build();
 
             ControllerResponse<RewardResponse> response = ControllerResponse.<RewardResponse>builder()

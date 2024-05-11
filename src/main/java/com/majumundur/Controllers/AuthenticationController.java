@@ -5,20 +5,22 @@ import com.majumundur.Security.Models.DTO.Request.CustomerCreateRequest;
 import com.majumundur.Security.Models.DTO.Request.LoginRequest;
 import com.majumundur.Security.Models.DTO.Request.MerchantCreateRequest;
 import com.majumundur.Security.Services.AuthenticationService;
+import com.majumundur.Services.ProductService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Tag(name = "Authentication Controller", description = "Controller To Register As Customer, Register As Merchant, and Login")
 @RequestMapping("/auth")
 public class AuthenticationController {
     private AuthenticationService service;
+
+    @Autowired
+    public ProductService productService;
 
     public AuthenticationController(AuthenticationService service){
         this.service = service;
@@ -27,8 +29,7 @@ public class AuthenticationController {
     @Operation(summary = "Login" , description = "Login to Get Token")
     @PostMapping(path = "/login",
             produces = MediaType.APPLICATION_JSON_VALUE,
-            consumes = MediaType.APPLICATION_JSON_VALUE
-    )
+            consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ControllerResponse> login(@RequestBody LoginRequest request){
         ControllerResponse<?> response = service.login(request);
         return ResponseEntity.ok(response);
@@ -37,8 +38,7 @@ public class AuthenticationController {
     @Operation(summary = "Register As Customer" , description = "Register As A Customer and Gain Role AS CUSTOMER")
     @PostMapping(path = "/register-as-customer",
             produces = MediaType.APPLICATION_JSON_VALUE,
-            consumes = MediaType.APPLICATION_JSON_VALUE
-    )
+            consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ControllerResponse> registerAsCustomer(@RequestBody CustomerCreateRequest request){
         ControllerResponse<?> response = service.registerAsCustomer(request);
         return ResponseEntity.ok(response);
@@ -47,8 +47,7 @@ public class AuthenticationController {
     @Operation(summary = "Register As Merchant" , description = "Register As A Merchant and Gain Role AS MERCHANT")
     @PostMapping(path = "/register-as-merchant",
             produces = MediaType.APPLICATION_JSON_VALUE,
-            consumes = MediaType.APPLICATION_JSON_VALUE
-    )
+            consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ControllerResponse> registerAsMerchant(@RequestBody MerchantCreateRequest request){
         ControllerResponse<?> response = service.registerAsMerchant(request);
         return ResponseEntity.ok(response);
