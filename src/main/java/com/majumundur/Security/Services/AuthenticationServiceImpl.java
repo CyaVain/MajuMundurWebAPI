@@ -26,6 +26,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -212,7 +213,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
             response.setStatusCode(HttpStatus.OK.value());
             response.setMessage(HttpStatus.OK.getReasonPhrase());
-            response.setData(token);
+            response.setData("Token: "+ token);
 
             return response;
         }

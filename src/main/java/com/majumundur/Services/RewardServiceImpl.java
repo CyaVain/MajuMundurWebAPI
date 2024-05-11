@@ -2,7 +2,7 @@ package com.majumundur.Services;
 
 import com.majumundur.Models.DTO.Responses.ControllerResponse;
 import com.majumundur.Models.DTO.Requests.RewardsCreateRequest;
-import com.majumundur.Models.DTO.Responses.RewardsResponse;
+import com.majumundur.Models.DTO.Responses.RewardResponse;
 import com.majumundur.Models.Rewards;
 import com.majumundur.Repositories.RewardRepository;
 import org.springframework.http.HttpStatus;
@@ -22,13 +22,13 @@ public class RewardServiceImpl implements  RewardService{
         this.validation = validation;
     }
     @Override
-    public ControllerResponse<List<RewardsResponse>> getAll() {
+    public ControllerResponse<List<RewardResponse>> getAll() {
         List<Rewards> rewards = repository.findAll();
-        List<RewardsResponse> dto = new ArrayList<>();
-        ControllerResponse<List<RewardsResponse>> response = new ControllerResponse<>();
+        List<RewardResponse> dto = new ArrayList<>();
+        ControllerResponse<List<RewardResponse>> response = new ControllerResponse<>();
 
         for(Rewards r : rewards){
-            RewardsResponse rewardsResponse = new RewardsResponse();
+            RewardResponse rewardsResponse = new RewardResponse();
             rewardsResponse.setRewardsCode(r.getCode());
             rewardsResponse.setRewardsName(r.getName());
             rewardsResponse.setRewardsPoint(r.getPoint());
@@ -46,7 +46,7 @@ public class RewardServiceImpl implements  RewardService{
     @Transactional
     @Override
     public ControllerResponse<?> create(RewardsCreateRequest request){
-
+        try{
             List<String> violations = validation.validate(request);
             if(violations != null) {
                 ControllerResponse<List<String>> response = new ControllerResponse<>();
@@ -55,7 +55,6 @@ public class RewardServiceImpl implements  RewardService{
                 response.setData(violations);
                 return response;
             }
-        try{
             if(repository.findByCode(request.getRewardsCode()) != null){
                 ControllerResponse<List<String>> response = new ControllerResponse<>();
                 response.setStatusCode(HttpStatus.OK.value());
@@ -71,13 +70,13 @@ public class RewardServiceImpl implements  RewardService{
 
             repository.save(reward);
 
-            RewardsResponse rewardsResponse = RewardsResponse.builder()
+            RewardResponse rewardsResponse = RewardResponse.builder()
                     .rewardsCode(reward.getCode())
                     .rewardsName(reward.getName())
                     .rewardsPoint(reward.getPoint())
                     .build();
 
-            ControllerResponse<RewardsResponse> response = ControllerResponse.<RewardsResponse>builder()
+            ControllerResponse<RewardResponse> response = ControllerResponse.<RewardResponse>builder()
                     .statusCode(HttpStatus.CREATED.value())
                     .message(HttpStatus.CREATED.getReasonPhrase())
                     .data(rewardsResponse)

@@ -7,7 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class RewardsResponse {
+public class RewardResponse {
     private String rewardsCode;
     private String rewardsName;
     private Integer rewardsPoint;
