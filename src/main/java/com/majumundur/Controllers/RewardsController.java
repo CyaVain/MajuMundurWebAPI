@@ -7,6 +7,8 @@ import com.majumundur.Services.RewardsService;
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -31,9 +33,6 @@ public class RewardsController {
         return ResponseEntity.ok(response);
     }
 
-    //Hidden Karena Tidak Relevan Dalam Alur Bisnis,
-    //Namun Bisa mempermudah untuk membuat Reward Baru
-    @Hidden
     @Operation(summary = "Create New Reward " , description = "Create Reward, SUPER_ADMIN ONLY !!")
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE
@@ -44,12 +43,22 @@ public class RewardsController {
             return  ResponseEntity.ok(response);
     }
 
-    @Operation(summary = "Redeem A Reward" , description = "Redeem A Rewards Based On Available Rewards")
+    @Operation(summary = "Redeem A Reward" , description = "Redeem A Rewards Based On Available Rewards, CUSTOMER OR SUPER_ADMIN ONLY")
     @PreAuthorize("hasAnyRole('CUSTOMER','SUPER_ADMIN')")
     @PostMapping("/redeem")
     public ResponseEntity<ControllerResponse> redeemReward(@RequestParam String customerId,
                                                            @RequestParam String rewardId){
         ControllerResponse<?> response = transactionsService.redeemReward(customerId,rewardId);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "Get Redeemed Rewards Histories " , description = "Get Redeemed Rewards Histories, CUSTOMER OR SUPER_ADMIN ONLY")
+    @PreAuthorize("hasAnyRole('CUSTOMER','SUPER_ADMIN')")
+    @GetMapping("/history")
+    public ResponseEntity<ControllerResponse> getHistories(@RequestParam(name = "page",required = false,defaultValue = "0") Integer page,
+                                                           @RequestParam(name = "size",required = false,defaultValue = "5") Integer size){
+        Pageable pageable = PageRequest.of(page,size);
+        ControllerResponse<?> response = transactionsService.redeemHistories(pageable);
         return ResponseEntity.ok(response);
     }
 

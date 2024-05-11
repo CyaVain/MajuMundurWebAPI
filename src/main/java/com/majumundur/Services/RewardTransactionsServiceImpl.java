@@ -2,16 +2,21 @@ package com.majumundur.Services;
 
 import com.majumundur.Models.Customers;
 import com.majumundur.Models.DTO.Responses.ControllerResponse;
+import com.majumundur.Models.DTO.Responses.PagingResponse;
 import com.majumundur.Models.DTO.Responses.RewardRedeemedResponse;
 import com.majumundur.Models.RewardTransactions;
 import com.majumundur.Models.Rewards;
 import com.majumundur.Repositories.RewardTransactionsRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class RewardTransactionsServiceImpl implements RewardTransactionsService {
@@ -94,7 +99,37 @@ public class RewardTransactionsServiceImpl implements RewardTransactionsService 
     }
 
     @Override
-    public ControllerResponse<?> redeemHistories() {
-        return null;
+    public ControllerResponse<?> redeemHistories(Pageable pageable) {
+        Page<RewardTransactions> rewards = repository.findAll(pageable);
+
+        List<RewardRedeemedResponse> dto = new ArrayList<>();
+        for(RewardTransactions r : rewards){
+            RewardRedeemedResponse data =  RewardRedeemedResponse.builder()
+                    .purchaseDate(r.getPurchaseDate().toString())
+                    .pointSpent(r.getReward().getPoint())
+                    .customerId(r.getCustomer().getId())
+                    .customerName(r.getCustomer().getName())
+                    .customerCurrentPoints(r.getCustomer().getRewardPoints())
+                    .rewardId(r.getReward().getId())
+                    .rewardName(r.getReward().getName())
+                    .build();
+
+            dto.add(data);
+        }
+
+        PagingResponse<List<RewardRedeemedResponse>> pagingResponse = PagingResponse.<List<RewardRedeemedResponse>>builder()
+                .totalElements((int)rewards.getTotalElements())
+                .totalPages(rewards.getTotalPages())
+                .currentPage(rewards.getNumber())
+                .size(rewards.getSize())
+                .data(dto)
+                .build();
+
+        ControllerResponse<PagingResponse> response = new ControllerResponse<>();
+        response.setStatusCode(HttpStatus.OK.value());
+        response.setMessage(HttpStatus.OK.getReasonPhrase());
+        response.setData(pagingResponse);
+
+        return response;
     }
 }

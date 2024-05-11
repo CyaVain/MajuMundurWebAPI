@@ -214,7 +214,6 @@ public class MerchantsServiceImpl implements MerchantsService {
 
     @Override
     public ControllerResponse<?> viewProducts(Pageable pageable, String merchantId) {
-        try{
             Merchants merchants = getMerchant(merchantId);
             if(merchants == null){
                 ControllerResponse<String> response = new ControllerResponse<>();
@@ -258,15 +257,6 @@ public class MerchantsServiceImpl implements MerchantsService {
             response.setData(pagingResponse);
 
             return response;
-
-        }
-        catch (Exception e){
-            ControllerResponse<String> response = new ControllerResponse<>();
-            response.setStatusCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
-            response.setMessage(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
-            response.setData(e.getMessage());
-            return  response;
-        }
     }
 
     @Transactional
