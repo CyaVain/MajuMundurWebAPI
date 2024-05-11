@@ -23,7 +23,7 @@ public class TransactionsController {
         this.service = service;
     }
 
-    @Operation(summary = "Create A Transaction" , description = "Create New Transaction, CUSTOMER OR SUPER_ADMIN ONLY !!")
+    @Operation(summary = "Create A Transaction CUSTOMER OR SUPER_ADMIN ONLY" , description = "Create New Transaction, CUSTOMER OR SUPER_ADMIN ONLY !!")
     @PreAuthorize("hasAnyRole('CUSTOMER','SUPER_ADMIN')")
     @PostMapping
     public ResponseEntity<?> createTransaction(@RequestBody TransactionCreateRequest request){
@@ -31,7 +31,7 @@ public class TransactionsController {
         return ResponseEntity.ok(response);
     }
 
-    @Operation(summary = "View Transaction History" , description = "View Transaction's Detail History, CUSTOMER, MERCHANT, OR SUPER_ADMIN ONLY")
+    @Operation(summary = "View Transaction History CUSTOMER, MERCHANT, OR SUPER_ADMIN ONLY" , description = "View Transaction's Detail History, CUSTOMER, MERCHANT, OR SUPER_ADMIN ONLY")
     @PreAuthorize("hasAnyRole('CUSTOMER','SUPER_ADMIN','MERCHANT')")
     @GetMapping("/{transactionId}")
     public ResponseEntity<?> viewTransactionHistory(@PathVariable String transactionId){
@@ -39,7 +39,7 @@ public class TransactionsController {
         return ResponseEntity.ok(response);
     }
 
-    @Operation(summary = "View Customer's History" , description = "View Customer's Transaction History, CUSTOMER, MERCHANT, OR SUPER_ADMIN ONLY")
+    @Operation(summary = "View Customer's History CUSTOMER, MERCHANT, OR SUPER_ADMIN ONLY" , description = "View Customer's Transaction History, CUSTOMER, MERCHANT, OR SUPER_ADMIN ONLY")
     @PreAuthorize("hasAnyRole('CUSTOMER','SUPER_ADMIN','MERCHANT')")
     @GetMapping()
     public ResponseEntity<?> getCustomerHistories(){

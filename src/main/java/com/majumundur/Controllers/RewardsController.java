@@ -33,7 +33,7 @@ public class RewardsController {
         return ResponseEntity.ok(response);
     }
 
-    @Operation(summary = "Create New Reward " , description = "Create Reward, SUPER_ADMIN ONLY !!")
+    @Operation(summary = "Create New Reward SUPER_ADMIN ONLY" , description = "Create Reward, SUPER_ADMIN ONLY !!")
     @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE
     )
@@ -43,7 +43,7 @@ public class RewardsController {
             return  ResponseEntity.ok(response);
     }
 
-    @Operation(summary = "Redeem A Reward" , description = "Redeem A Rewards Based On Available Rewards, CUSTOMER OR SUPER_ADMIN ONLY")
+    @Operation(summary = "Redeem A Reward CUSTOMER OR SUPER_ADMIN ONLY" , description = "Redeem A Rewards Based On Available Rewards, CUSTOMER OR SUPER_ADMIN ONLY")
     @PreAuthorize("hasAnyRole('CUSTOMER','SUPER_ADMIN')")
     @PostMapping("/redeem")
     public ResponseEntity<ControllerResponse> redeemReward(@RequestParam String customerId,
@@ -52,7 +52,7 @@ public class RewardsController {
         return ResponseEntity.ok(response);
     }
 
-    @Operation(summary = "Get Redeemed Rewards Histories " , description = "Get Redeemed Rewards Histories, CUSTOMER OR SUPER_ADMIN ONLY")
+    @Operation(summary = "Get Redeemed Rewards Histories CUSTOMER OR SUPER_ADMIN ONLY " , description = "Get Redeemed Rewards Histories, CUSTOMER OR SUPER_ADMIN ONLY")
     @PreAuthorize("hasAnyRole('CUSTOMER','SUPER_ADMIN')")
     @GetMapping("/history")
     public ResponseEntity<ControllerResponse> getHistories(@RequestParam(name = "page",required = false,defaultValue = "0") Integer page,

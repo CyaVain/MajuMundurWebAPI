@@ -28,7 +28,7 @@ public class MerchantsController {
         return ResponseEntity.ok(response);
     }
 
-    @Operation(summary = "Create New Product " , description = "Create A Product, MERCHANTS OR SUPER_ADMIN ONLY !!")
+    @Operation(summary = "Create New Product MERCHANTS OR SUPER_ADMIN ONLY" , description = "Create A Product, MERCHANTS OR SUPER_ADMIN ONLY !!")
     @PreAuthorize("hasAnyRole('MERCHANT','SUPER_ADMIN')")
     @PostMapping("/{merchantId}/add-product")
     public ResponseEntity<?> addProduct(@RequestBody ProductCreateRequest request,
@@ -38,7 +38,7 @@ public class MerchantsController {
         return ResponseEntity.ok(response);
     }
 
-    @Operation(summary = "Update Product " , description = "Update A Product, MERCHANTS OR SUPER_ADMIN ONLY !!")
+    @Operation(summary = "Update Product MERCHANTS OR SUPER_ADMIN ONLY" , description = "Update A Product, MERCHANTS OR SUPER_ADMIN ONLY !!")
     @PreAuthorize("hasAnyRole('MERCHANT','SUPER_ADMIN')")
     @PutMapping("/{merchantId}/update-product")
     public ResponseEntity<?> updateProduct(@RequestBody ProductUpdateRequest request,
@@ -47,7 +47,7 @@ public class MerchantsController {
         return ResponseEntity.ok(response);
     }
 
-    @Operation(summary = "Delete A Product " , description = "Delete A Product By It's Product Id, MERCHANT OR SUPER_ADMIN ONLY !!")
+    @Operation(summary = "Delete A Product MERCHANTS OR SUPER_ADMIN ONLY" , description = "Delete A Product By It's Product Id, MERCHANT OR SUPER_ADMIN ONLY !!")
     @PreAuthorize("hasAnyRole('MERCHANT','SUPER_ADMIN')")
     @DeleteMapping("/{merchantId}/products/{productId}")
     public ResponseEntity<?> deleteProduct(@PathVariable String productId,
@@ -56,7 +56,7 @@ public class MerchantsController {
         return ResponseEntity.ok(response);
     }
 
-    @Operation(summary = "Get Product Details " , description = "Get A Product Details")
+    @Operation(summary = "Get Product Details" , description = "Get A Product Details")
     @GetMapping("/{merchantId}/products/{productId}")
     public ResponseEntity<?> viewProductDetails(@PathVariable String productId,
                                            @PathVariable String merchantId){
