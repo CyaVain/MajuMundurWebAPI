@@ -35,6 +35,9 @@ public class RewardServiceImpl implements  RewardService{
                 .name("Reward B")
                 .point(40)
                 .build();
+        if(repository.findByCode(rewardA.getCode()) != null || repository.findByCode(rewardB.getCode()) != null){
+            return;
+        }
         repository.save(rewardA);
         repository.save(rewardB);
     }

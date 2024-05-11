@@ -231,9 +231,9 @@ public class MerchantServiceImpl implements MerchantService {
                 response.setData("ProductList Is Empty");
                 return response;
             }
-            List<ProductViewResponse> dto = new ArrayList<>();
+            List<ProductDetailsResponse> dto = new ArrayList<>();
             for(Products p : products){
-                ProductViewResponse viewResponse = ProductViewResponse.builder()
+                ProductDetailsResponse viewResponse = ProductDetailsResponse.builder()
                         .merchantId(p.getMerchant().getId())
                         .productId(p.getId())
                         .name(p.getName())
@@ -244,7 +244,7 @@ public class MerchantServiceImpl implements MerchantService {
                 dto.add(viewResponse);
             }
 
-            PagingResponse<List<ProductViewResponse>> pagingResponse = PagingResponse.<List<ProductViewResponse>>builder()
+            PagingResponse<List<ProductDetailsResponse>> pagingResponse = PagingResponse.<List<ProductDetailsResponse>>builder()
                     .totalElements((int)products.getTotalElements())
                     .totalPages(products.getTotalPages())
                     .currentPage(products.getNumber())
@@ -332,7 +332,7 @@ public class MerchantServiceImpl implements MerchantService {
                 return response;
             }
 
-            ProductViewResponse dto = ProductViewResponse.builder()
+            ProductDetailsResponse dto = ProductDetailsResponse.builder()
                     .merchantId(product.getMerchant().getId())
                     .productId(product.getId())
                     .name(product.getName())
@@ -341,7 +341,7 @@ public class MerchantServiceImpl implements MerchantService {
                     .price(product.getPrice())
                     .build();
 
-            ControllerResponse<ProductViewResponse> response = new ControllerResponse<>();
+            ControllerResponse<ProductDetailsResponse> response = new ControllerResponse<>();
             response.setStatusCode(HttpStatus.OK.value());
             response.setMessage(HttpStatus.OK.getReasonPhrase());
             response.setData(dto);

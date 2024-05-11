@@ -41,8 +41,8 @@ public class SecurityConfig {
                                 .requestMatchers("/auth/**").permitAll()
                                 //GetAll() di RewardsController Tidak Perlu Authorized / Bisa Secara Anonymous
                                 .requestMatchers(HttpMethod.GET,"/api/rewards").permitAll()
-                                .requestMatchers(HttpMethod.GET,"/api/merchants/{merchantId}").permitAll()
-                                .requestMatchers(HttpMethod.GET,"/api/merchants/{merchantId}/**").permitAll()
+                                .requestMatchers(HttpMethod.GET,"/api/merchants/**").permitAll()
+                                .requestMatchers(HttpMethod.GET,"/api/customers/**").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
