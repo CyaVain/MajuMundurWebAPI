@@ -1,9 +1,7 @@
 package com.majumundur.Security.Models.DTO.Request;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -15,7 +13,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class MerchantCreateRequest {
+public class MerchantRegisterRequest {
 
     @Schema(example = "Toko Merdeka Official Store")
     @NotBlank(message = "Name must not be blank")

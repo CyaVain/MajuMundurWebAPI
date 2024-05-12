@@ -3,7 +3,7 @@ package com.majumundur.Services;
 import com.majumundur.Models.Customers;
 import com.majumundur.Models.DTO.Responses.ControllerResponse;
 import com.majumundur.Models.DTO.Responses.CustomerDetailsResponse;
-import com.majumundur.Security.Models.DTO.Request.CustomerCreateRequest;
+import com.majumundur.Security.Models.DTO.Request.CustomerRegisterRequest;
 import com.majumundur.Repositories.CustomersRepository;
 import com.majumundur.Security.Models.UserCredentials;
 import org.springframework.http.HttpStatus;
@@ -62,7 +62,7 @@ public class CustomersServiceImpl implements CustomersService {
 
     @Transactional
     @Override
-    public Customers save(CustomerCreateRequest request, UserCredentials credentials) {
+    public Customers save(CustomerRegisterRequest request, UserCredentials credentials) {
         Customers customer = Customers.builder()
                 .name(request.getName())
                 .phoneNumber(request.getPhoneNumber())

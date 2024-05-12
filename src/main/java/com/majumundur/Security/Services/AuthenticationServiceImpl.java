@@ -2,11 +2,11 @@ package com.majumundur.Security.Services;
 
 import com.majumundur.Models.Customers;
 import com.majumundur.Models.Merchants;
-import com.majumundur.Security.Models.DTO.Request.CustomerCreateRequest;
+import com.majumundur.Security.Models.DTO.Request.CustomerRegisterRequest;
 import com.majumundur.Models.DTO.Responses.ControllerResponse;
 import com.majumundur.Security.Config.JwtUtils;
 import com.majumundur.Security.Models.DTO.Request.LoginRequest;
-import com.majumundur.Security.Models.DTO.Request.MerchantCreateRequest;
+import com.majumundur.Security.Models.DTO.Request.MerchantRegisterRequest;
 import com.majumundur.Security.Models.DTO.Response.CustomerCreatedResponse;
 import com.majumundur.Security.Models.DTO.Response.MerchantCreatedResponse;
 import com.majumundur.Security.Models.Roles;
@@ -74,7 +74,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public ControllerResponse<?> registerAsMerchant(MerchantCreateRequest request) {
+    public ControllerResponse<?> registerAsMerchant(MerchantRegisterRequest request) {
         List<String> violations = validation.validate(request);
         if(violations != null) {
             ControllerResponse<List> response = new ControllerResponse<>();
@@ -130,7 +130,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     @Transactional
-    public ControllerResponse<?> registerAsCustomer(CustomerCreateRequest request) {
+    public ControllerResponse<?> registerAsCustomer(CustomerRegisterRequest request) {
         List<String> violations = validation.validate(request);
         if(violations != null) {
             ControllerResponse<List> response = new ControllerResponse<>();

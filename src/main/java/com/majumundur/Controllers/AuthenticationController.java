@@ -1,9 +1,9 @@
 package com.majumundur.Controllers;
 
 import com.majumundur.Models.DTO.Responses.ControllerResponse;
-import com.majumundur.Security.Models.DTO.Request.CustomerCreateRequest;
+import com.majumundur.Security.Models.DTO.Request.CustomerRegisterRequest;
 import com.majumundur.Security.Models.DTO.Request.LoginRequest;
-import com.majumundur.Security.Models.DTO.Request.MerchantCreateRequest;
+import com.majumundur.Security.Models.DTO.Request.MerchantRegisterRequest;
 import com.majumundur.Security.Services.AuthenticationService;
 import com.majumundur.Services.ProductsService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -39,7 +39,7 @@ public class AuthenticationController {
     @PostMapping(path = "/register-as-customer",
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ControllerResponse> registerAsCustomer(@RequestBody CustomerCreateRequest request){
+    public ResponseEntity<ControllerResponse> registerAsCustomer(@RequestBody CustomerRegisterRequest request){
         ControllerResponse<?> response = service.registerAsCustomer(request);
         return ResponseEntity.ok(response);
     }
@@ -48,7 +48,7 @@ public class AuthenticationController {
     @PostMapping(path = "/register-as-merchant",
             produces = MediaType.APPLICATION_JSON_VALUE,
             consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ControllerResponse> registerAsMerchant(@RequestBody MerchantCreateRequest request){
+    public ResponseEntity<ControllerResponse> registerAsMerchant(@RequestBody MerchantRegisterRequest request){
         ControllerResponse<?> response = service.registerAsMerchant(request);
         return ResponseEntity.ok(response);
     }

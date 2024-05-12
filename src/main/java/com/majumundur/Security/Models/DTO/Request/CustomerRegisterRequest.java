@@ -10,7 +10,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CustomerCreateRequest {
+public class CustomerRegisterRequest {
 
     @Schema(example = "Kevin Halim")
     @NotBlank(message = "Name must not be blank")

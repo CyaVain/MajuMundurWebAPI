@@ -6,7 +6,7 @@ import com.majumundur.Models.DTO.Responses.*;
 import com.majumundur.Models.Merchants;
 import com.majumundur.Models.Products;
 import com.majumundur.Repositories.MerchantsRepository;
-import com.majumundur.Security.Models.DTO.Request.MerchantCreateRequest;
+import com.majumundur.Security.Models.DTO.Request.MerchantRegisterRequest;
 import com.majumundur.Security.Models.UserCredentials;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,7 +33,7 @@ public class MerchantsServiceImpl implements MerchantsService {
 
     @Transactional
     @Override
-    public Merchants save(MerchantCreateRequest request, UserCredentials credentials) {
+    public Merchants save(MerchantRegisterRequest request, UserCredentials credentials) {
         Merchants merchant = Merchants.builder()
                 .name(request.getName())
                 .phoneNumber(request.getPhoneNumber())
