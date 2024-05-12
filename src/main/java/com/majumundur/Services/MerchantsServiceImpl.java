@@ -196,8 +196,8 @@ public class MerchantsServiceImpl implements MerchantsService {
                     .build();
 
             ControllerResponse<ProductResponse> response = ControllerResponse.<ProductResponse>builder()
-                    .statusCode(HttpStatus.CREATED.value())
-                    .message(HttpStatus.CREATED.getReasonPhrase())
+                    .statusCode(HttpStatus.OK.value())
+                    .message(HttpStatus.OK.getReasonPhrase())
                     .data(dto)
                     .build();
 

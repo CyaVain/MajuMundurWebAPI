@@ -15,7 +15,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@Tag(name = "Rewards Controller", description = "Controller To Upload New Rewards, View All Rewards, Search Rewards By It's Code / Name")
+@Tag(name = "Rewards Controller", description = "Controller To Create New Rewards, View All Rewards, Redeem Rewards")
 @RequestMapping("/api/rewards")
 public class RewardsController {
     private RewardsService service;

@@ -56,6 +56,7 @@ public class TransactionsServiceImpl implements TransactionsService {
                 response.setStatusCode(HttpStatus.NOT_FOUND.value());
                 response.setMessage(HttpStatus.NOT_FOUND.getReasonPhrase());
                 response.setData("Customer Not Found / Invalid Customer Id");
+                return response;
             }
 
             Merchants merchant = merchantsService.getMerchant(request.getMerchantId());
